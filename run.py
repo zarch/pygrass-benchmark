@@ -7,7 +7,7 @@ import random
 # TEST DATA VARIABLES
 #---------------------------------------------------------
 POW = 4
-# computationa region
+# computational region: ROWSxCOLS
 ROWS = 10 ** POW
 COLS = 10 ** POW
 # vector inputs parameters
@@ -22,7 +22,7 @@ RNAME = 'field'
 REPEAT = 5
 NUMBER = 1
 #
-CREATE = False
+CREATE = True
 #---------------------------------------------------------
 # import from grass
 from grass.pygrass.modules import general as g
@@ -102,6 +102,37 @@ mapcalcc_set = "import subprocess as sub"
 mapcalcc_timer = timeit.Timer(mapcalcc_cmd, setup=mapcalcc_set)
 mapcalcc_times = mapcalcc_timer.repeat(REPEAT, NUMBER)
 
+#
+# Mapset glist
+#
+glist_cmd = "Mapset('PERMENENT').glist('rast')"
+glist_set = "from grass.pygrass.gis import Mapset"
+glist_timer = timeit.Timer(mapcalcc_cmd, setup=mapcalcc_set)
+glist_times = glist_timer.repeat(REPEAT, NUMBER*10)
+
+#
+# Mapset gcore list
+#
+glistc_cmd = "gcore.list_grouped('rast')['PERMANENT']"
+glistc_set = "from grass.script import core as gcore"
+glistc_timer = timeit.Timer(mapcalcc_cmd, setup=mapcalcc_set)
+glistc_times = glistc_timer.repeat(REPEAT, NUMBER*10)
+
+#
+# Region to dict
+#
+reg_cmd = "dict(Region().iteritems())"
+reg_set = "from grass.pygrass.gis.region import Region"
+reg_timer = timeit.Timer(mapcalcc_cmd, setup=mapcalcc_set)
+reg_times = reg_timer.repeat(REPEAT, NUMBER*10)
+
+#
+# Region gcore to dict
+#
+regc_cmd = "gcore.region()"
+regc_set = "from grass.pygrass.gis.region import Region"
+regc_timer = timeit.Timer(mapcalcc_cmd, setup=mapcalcc_set)
+regc_times = regc_timer.repeat(REPEAT, NUMBER*10)
 
 #---------------------------------------------------------
 # Print results
@@ -111,3 +142,7 @@ print_results(rr_cmd, rr_set, rr_times)
 print_results(rrc_cmd, rrc_set, rrc_times)
 print_results(mapcalc_cmd, mapcalc_set, mapcalc_times)
 print_results(mapcalcc_cmd, mapcalcc_set, mapcalcc_times)
+print_results(glist_cmd, glist_set, glist_times)
+print_results(glistc_cmd, glistc_set, glistc_times)
+print_results(reg_cmd, reg_set, reg_times)
+print_results(regc_cmd, regc_set, regc_times)
