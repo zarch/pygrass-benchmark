@@ -141,7 +141,7 @@ regc_cmd = "gcore.region()"
 regc_set = "from grass.script import core as gcore"
 regc_timer = timeit.Timer(regc_cmd, setup=regc_set)
 print regc_cmd
-regc_times = regc_timer.repeat(REPEAT, NUMBER * 0)
+regc_times = regc_timer.repeat(REPEAT, NUMBER * 10)
 
 #---------------------------------------------------------
 # Print results
