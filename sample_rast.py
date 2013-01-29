@@ -4,6 +4,7 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.functions import coor2pixel
+import subprocess as sub
 
 
 def sample(vect_in_name, rast_in_name):
@@ -45,3 +46,14 @@ def samples(vect_in_names, rast_in_name):
     """samples(['points00', 'points01'], 'field')"""
     for vect_in in vect_in_names:
         sample(vect_in, rast_in_name)
+
+
+def v_sample(vect_in_name, rast_in_name):
+    cmd = "v.sample2 --o --q input=%s rast=%s output=result1 column=result"
+    sub.Popen(cmd % (vect_in_name, rast_in_name), shell=True).wait()
+
+
+def v_samples(vect_in_names, rast_in_name):
+    """samples(['points00', 'points01'], 'field')"""
+    for vect_in in vect_in_names:
+        v_sample(vect_in, rast_in_name)
